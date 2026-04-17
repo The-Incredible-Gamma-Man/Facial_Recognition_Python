@@ -60,6 +60,7 @@
  mkdir -p certs
  cd certs
  mkcert -cert-file cert.pem -key-file key.pem localhost 127.0.0.1 ::1 YOUR_LOCAL_IP
+ cd ..
  ```
  
  ## Running the App
