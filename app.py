@@ -116,6 +116,15 @@ def video_feed():
 
 if __name__ == '__main__':
     load_known_faces()
-    print(f"\n🚀 HomeCam running on http://0.0.0.0:5000")
+    print(f"\n🚀 HomeCam running on HTTPS!")
     print(f"   Using camera: {DEVICE_PATH}")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    print(f"   Access via: https://127.0.0.1:5000  or  https://YOUR_LOCAL_IP:5000")
+    print("   Note: Accept the certificate if prompted the first time (mkcert makes it trusted).")
+    
+    # Force HTTPS with your mkcert files
+    app.run(
+        debug=True,
+        host='0.0.0.0',
+        port=5000,
+        ssl_context=('certs/cert.pem', 'certs/key.pem')   # Path to your certs
+    )
