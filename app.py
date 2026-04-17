@@ -14,7 +14,7 @@ print("🔧 HomeCam Setup")
 DEVICE_PATH = input("Enter the capture device location (e.g. /dev/video0 or /dev/video2): ").strip()
 
 if not DEVICE_PATH:
-    DEVICE_PATH = "/dev/video0"
+    DEVICE_PATH = "/dev/video2"
     print(f"No input given, defaulting to {DEVICE_PATH}")
 
 TOLERANCE = 0.55
