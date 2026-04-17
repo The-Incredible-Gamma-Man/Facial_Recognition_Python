@@ -5,8 +5,6 @@
  [![OpenCV](https://img.shields.io/badge/OpenCV-4.x-green?style=for-the-badge&logo=opencv)](https://opencv.org/)
  
  A simple, powerful home facial recognition system with live streaming and unknown person alerts.
- Beware, by default, this runs on HTTP and by nature, is insecure.
- Leaving `0.0.0.0:5000` open allows *anybody* access and is a bad idea in a production environment!
  
  ## Features
  
@@ -15,7 +13,8 @@
  - Automatically saves unknown faces to `unknowns/` folder
  - Web dashboard with live MJPEG stream and capture button
  - Easy device selection at startup
- - Works remotely on your local network
+ - HTTPS with mkcert
+ - Works remotely from your local network
  
  ## Setup
  
@@ -33,7 +32,7 @@
  source venv/bin/activate
  
  sudo apt update
- sudo apt install -y cmake build-essential pkg-config libatlas-base-dev libopenblas-dev libjpeg-dev python3-dev
+ sudo apt install -y cmake build-essential pkg-config libatlas-base-dev libopenblas-dev libjpeg-dev python3-dev libnss3-tools
  
  pip install --upgrade pip setuptools wheel
  pip install "setuptools<70.0.0"
@@ -44,11 +43,24 @@
  
  3. **Add known faces**
  
- Add clear, frontal photos to the `known_faces/` folder:
- - `known_faces/Mom.jpg`
- - `known_faces/Dad.jpg`
- - `known_faces/Alice.jpg`
- etc. The filename (without extension) becomes the label.
+ Add clear frontal photos (e.g. `Mom.jpg`) to the `known_faces/` folder. The filename without extension becomes the displayed name.
+ 
+ ## HTTPS Setup with mkcert (Recommended)
+
+**Change `YOUR_LOCAL_IP` before hitting enter**
+ 
+ ```bash
+ # Install mkcert
+ curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+ chmod +x mkcert-v*-linux-amd64
+ sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
+ mkcert -install
+ 
+ # Generate certificates
+ mkdir -p certs
+ cd certs
+ mkcert -cert-file cert.pem -key-file key.pem localhost 127.0.0.1 ::1 YOUR_LOCAL_IP
+ ```
  
  ## Running the App
  
@@ -56,26 +68,27 @@
  python app.py
  ```
  
- You will be prompted to enter your camera device (e.g. `/dev/video0` or `/dev/video2`).
+ You will be prompted for your camera device. The app now runs on **HTTPS port 5000**.
  
- Then open your browser and go to:
- - `http://127.0.0.1:5000` (on the same machine)
- - or `http://YOUR_LOCAL_IP:5000` from other devices on your network.
+ Access: `https://127.0.0.1:5000` or `https://YOUR_LOCAL_IP:5000`
  
  ## Project Structure
  
  ```
  known_faces/     ← Add one photo per person here
  unknowns/        ← Unknown faces are saved here automatically
+ certs/           ← cert.pem and key.pem (for HTTPS)
  templates/
  app.py
  ```
  
  ## Troubleshooting
  
- - **Black screen**: Try a different `/dev/videoX` device. Your laptop webcam might be `/dev/video0`.
+ - **Black screen**: Try a different `/dev/videoX` device.
  - **Camera permission**: `sudo usermod -aG video $USER` then reboot.
  - **"No face found"**: Use well-lit, frontal photos in `known_faces/`.
+ - **HTTPS warnings**: Run `mkcert -install` again and restart your browser.
+ - **Remote access**: Include your local IP when generating the certificate with mkcert.
  
  ## License
  
