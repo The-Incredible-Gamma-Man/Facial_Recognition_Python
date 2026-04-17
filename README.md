@@ -44,7 +44,7 @@
  
  3. **Add known faces**
  
- Create a `known_faces/` folder and add clear frontal photos:
+ Add clear, frontal photos to the `known_faces/` folder:
  - `known_faces/Mom.jpg`
  - `known_faces/Dad.jpg`
  - `known_faces/Alice.jpg`
